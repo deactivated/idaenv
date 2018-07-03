@@ -52,6 +52,10 @@ def cmd_status(mgr, opts):
             print_plan(plan)
 
 
+def cmd_prefix(mgr, opts):
+    print(mgr.user_dir)
+
+
 def cmd_disable(mgr, opts):
     raise NotImplementedError()
 
@@ -68,15 +72,14 @@ def main():
                         help="List installed IDA modules.")
     sp.set_defaults(func=cmd_status)
 
+    sp = sps.add_parser("prefix", help="Print the idaenv install prefix.")
+    sp.set_defaults(func=cmd_prefix)
+
     sp = sps.add_parser("disable",
                         help="Disable an IDA module.")
     sp.set_defaults(func=cmd_disable)
 
     opts = ap.parse_args()
-
-    if 'func' not in opts:
-        ap.print_usage()
-        return
 
     mgr = manager.VenvPluginManager()
 
