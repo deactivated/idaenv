@@ -18,8 +18,7 @@ Initialize a virtual environment to use with IDA Pro:
 
 Install idaenv:
 
-    $ cd idaenv
-    $ python setup.py install
+    $ pip install idaenv
 
 Update the IDAUSR environment variable to include the idaenv plugin directory:
 
