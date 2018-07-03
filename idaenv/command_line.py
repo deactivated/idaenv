@@ -80,7 +80,5 @@ def main():
     sp.set_defaults(func=cmd_disable)
 
     opts = ap.parse_args()
-
-    mgr = manager.VenvPluginManager()
-
+    mgr = manager.get_default_manager()
     opts.func(mgr, opts)

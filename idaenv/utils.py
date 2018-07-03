@@ -30,6 +30,7 @@ def get_virtualenv_path():
 
 
 def get_platform():
+    "Return a standardized platform name."
     if sys.platform.startswith("linux"):
         return "linux"
     if sys.platform.startswith("win"):
@@ -40,13 +41,18 @@ def get_platform():
     raise RuntimeError("Surprising platform name.")
 
 
+def get_default_ida_usr():
+    "Return the default value of IDAUSR for the current system."
+    return os.path.expandvars(IDAUSR_DEFAULTS[get_platform()])
+
+
 def append_ida_usr(new_dir, preserve_default=True):
+    "Append a directory to the IDAUSR environment variable."
     if "IDAUSR" in os.environ:
         path = os.pathsep.split(os.environ["IDAUSR"])
     else:
         if preserve_default:
-            default = os.path.expandvars(IDAUSR_DEFAULTS[get_platform()])
-            path = [default]
+            path = [get_default_ida_usr()]
         else:
             path = []
 

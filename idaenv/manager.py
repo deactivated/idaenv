@@ -8,7 +8,7 @@ import pkg_resources
 
 from collections import namedtuple
 
-from .utils import get_virtualenv_path
+from .utils import get_virtualenv_path, get_default_ida_usr
 
 
 MODULE_TYPES = {"plugins", "loaders", "procs"}
@@ -188,12 +188,17 @@ class PluginManager(object):
         return "%s_%s_%s.py" % (dist_part, name_part, sha_part)
 
 
-class VenvPluginManager(PluginManager):
-
-    def __init__(self):
-        cur_env = get_virtualenv_path()
-        if not cur_env:
-            raise RuntimeError("Not in virtualenv.")
-
+def get_default_manager(require_venv=False):
+    """
+    Initialize a plugin manager based on the current environment.
+    """
+    cur_env = get_virtualenv_path()
+    if cur_env:
         ida_path = os.path.join(cur_env, "ida")
-        super(VenvPluginManager, self).__init__(ida_path)
+    elif require_venv:
+        raise RuntimeError("Not in virtual environment.")
+    else:
+        print("Warning: operating outside of a virtual environment.")
+        ida_path = get_default_ida_usr()
+
+    return PluginManager(ida_path)
