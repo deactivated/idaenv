@@ -63,6 +63,7 @@ from setuptools import setup, find_packages
 setup(name='keypatch',
       version="0.0",
       packages=find_packages(exclude=['ez_setup']),
+      py_modules=['keypatch'],
       install_requires=[
           "keystone-engine"
       ],
