@@ -54,15 +54,16 @@ def PLUGIN_ENTRY():
 
 In order for idaenv to know where plugins are located inside of a package, they
 have to be called out in `setup.py` using "entry points". For example, the
-declaration for keypatch might look like:
+declaration for a traditional plugin that consists of just a single file (like
+the excellent keypatch) might look like:
 
 ```python
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 setup(name='keypatch',
       version="0.0",
-      packages=find_packages(exclude=['ez_setup']),
+      py_modules=["keypatch"],
       install_requires=[
           "keystone-engine"
       ],
@@ -74,7 +75,19 @@ setup(name='keypatch',
       })
 ```
 
-Three different entry point groups are supported:
+The structure of the entry points dictionary is described in detail by the
+[setuptools documentation](https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins).
+The general structure is:
+
+```python
+{
+    "entry_point_group": [
+        "plugin_name=module.submodule:PluginClass.plugin_method
+    ]
+}
+```
+
+idaenv supports the following entry point groups:
 
 - `idapython_plugins`
 - `idapython_procs`
