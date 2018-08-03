@@ -1,6 +1,5 @@
-import argparse
-
 from . import manager
+from .cmd_utils import ArgumentParser
 
 
 def cmd_update(mgr, opts):
@@ -61,7 +60,7 @@ def cmd_disable(mgr, opts):
 
 
 def main():
-    ap = argparse.ArgumentParser()
+    ap = ArgumentParser()
     sps = ap.add_subparsers()
 
     sp = sps.add_parser("update",
@@ -69,6 +68,7 @@ def main():
     sp.set_defaults(func=cmd_update)
 
     sp = sps.add_parser("status",
+                        aliases=["list", "ls"],
                         help="List installed IDA modules.")
     sp.set_defaults(func=cmd_status)
 
