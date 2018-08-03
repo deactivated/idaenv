@@ -6,7 +6,7 @@ with open("README.md") as f:
 
 
 setup(name='idaenv',
-      version="0.2.0",
+      version="0.3.0",
       description="IDA Pro plugin manager.",
       long_description=readme,
       long_description_content_type="text/markdown",
