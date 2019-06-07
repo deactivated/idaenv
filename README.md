@@ -29,11 +29,21 @@ idaenv "update" command:
 
     $ pip install ...
     $ idaenv update
+    Writing wrapper to '/home/me/.virtualenvs/cpy2/ida/plugins/keypatch_keypatch_f265c7.py'...
+    Writing wrapper to '/home/me/.virtualenvs/cpy2/ida/plugins/uemu_uemu_791c39.py'...
+      Updated:
+        - keypatch.keypatch
+        - uemu.uemu
+
     ... TODO include output ...
 
-To see what plugins are installed, use the "status" command.
+To see what plugins are installed, use the "ls" or "status" command.
 
-    ... TODO include output ...
+    $ idaenv ls
+    Plugins:
+      Active:
+        - keypatch.keypatch
+        - uemu.uemu
 
 ## Mechanism
 
@@ -43,11 +53,10 @@ installed package and then export the interface expected by IDA Pro. For
 example, plugin wrappers use the following template:
 
 ```python
-import pkg_resources
+from %(module)s import %(attr)s
 
 def PLUGIN_ENTRY():
-    ep = pkg_resources.load_entry_point(%(dist)r, %(group)r, %(name)r)
-    return ep()
+    return %(attr)s()
 ```
 
 ## Packaging
