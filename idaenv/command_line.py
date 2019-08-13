@@ -56,7 +56,18 @@ def cmd_prefix(mgr, opts):
 
 
 def cmd_disable(mgr, opts):
-    raise NotImplementedError()
+    def print_plan(changes):
+        if changes["delete"]:
+            print("Uninstalled:")
+            for ep, path in changes["delete"]:
+                print("  - %s.%s" % (ep.dist, ep.name))
+
+    for mtype in ["plugins", "loaders", "procs"]:
+        wrapper = mgr.find_module_wrapper(mtype, opts.module_name)
+        if wrapper is not None:
+            plan = mgr.plan_delete([wrapper])
+            print_plan(plan)
+            mgr.execute_update(mtype, plan)
 
 
 def main():
@@ -77,6 +88,7 @@ def main():
 
     sp = sps.add_parser("disable",
                         help="Disable an IDA module.")
+    sp.add_argument("module_name")
     sp.set_defaults(func=cmd_disable)
 
     opts = ap.parse_args()

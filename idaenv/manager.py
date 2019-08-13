@@ -79,6 +79,20 @@ class PluginManager(object):
             plan = self.plan_update(module_type)
             self.execute_update(module_type, plan)
 
+    def find_module_wrapper(self, module_type, module_name):
+        "Locate a module wrapper by name."
+        wrapper_dir = self.wrapper_dir(module_type)
+        wrappers = self.find_wrappers(wrapper_dir)
+        for ep, wrapper_path in wrappers:
+            if "%s.%s" % (ep.dist, ep.name) == module_name:
+                return (ep, wrapper_path)
+
+    def plan_delete(self, wrappers):
+        return {
+            "create": [],
+            "delete": list(wrappers)
+        }
+
     def plan_update(self, module_type):
         "Plan actions for synchronization."
         if module_type not in MODULE_TYPES:
