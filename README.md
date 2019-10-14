@@ -12,11 +12,24 @@ contained in the package.
 
 ## Usage
 
-Initialize a virtual environment to use with IDA Pro:
+If you're using IDA 7.3 or earlier, initialize a Python 2 virtual environment
+and activate it:
 
-    $ mkvirtualenv -p python2 ida
+    $ virtualenv -p python2 ida
+    $ ./ida/bin/activate
 
-Install idaenv:
+If you're using IDA 7.4 or later, it is recommended to use
+[venv](https://docs.python.org/3/library/venv.html), which is included in the
+standard library.
+
+    $ python3 -m venv ida
+    $ ./ida/bin/activate
+
+It is still possible to use virtualenv with Python 3, however you will encounter
+an exception when starting IDA 7.4 due to a longstanding
+[issue](https://github.com/pypa/virtualenv/issues/737) in virtualenv.
+
+Once virtual environment is activated, install idaenv:
 
     $ pip install idaenv
 

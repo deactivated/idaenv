@@ -200,7 +200,9 @@ class PluginManager(object):
 
         dist_part = clean(ep_info.dist[:15])
         name_part = clean(ep_info.name[:15])
-        sha_part = hashlib.sha1("_".join(ep_info)).hexdigest()[:6]
+        sha_part = hashlib.sha1(
+            "_".join(ep_info).encode('utf8')
+        ).hexdigest()[:6]
         return "%s_%s_%s.py" % (dist_part, name_part, sha_part)
 
 
