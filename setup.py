@@ -6,7 +6,7 @@ with open("README.md") as f:
 
 
 setup(name='idaenv',
-      version="0.3.0",
+      version="0.4.0",
       description="IDA Pro plugin manager.",
       long_description=readme,
       long_description_content_type="text/markdown",
@@ -15,7 +15,9 @@ setup(name='idaenv',
       license="MIT",
       classifiers=[
           "Natural Language :: English",
-          "Programming Language :: Python"
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2",
+          "Programming Language :: Python :: 3",
       ],
       entry_points={
           "console_scripts": [
