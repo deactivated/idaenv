@@ -5,10 +5,12 @@ from collections import namedtuple
 try:
     # Try the backport package
     import importlib_metadata as importlib_metadata
+
     pkg_resources = None
 except ImportError:
     # Try importlib.metadata from stdlib otherwise
     import importlib.metadata as importlib_metadata
+
     pkg_resources = None
 except ImportError:
     # Use pkg_resources if importlib.metadata isn't available
@@ -57,14 +59,8 @@ def _importlib_iter_entry_point_info(group_name):
     if eps is None:
         return
     for ep in eps:
-        key = re.sub(r"[-_.]+", "-", ep.dist.metadata['Name']).lower()
-        yield EntryPointInfo(
-            key,
-            group_name,
-            ep.name,
-            ep.module,
-            ep.attr
-        )
+        key = re.sub(r"[-_.]+", "-", ep.dist.metadata["Name"]).lower()
+        yield EntryPointInfo(key, group_name, ep.name, ep.module, ep.attr)
 
 
 def _pkg_resources_normalized_name(dist):
@@ -82,7 +78,7 @@ def _pkg_resources_iter_entry_point_info(group_name):
             group_name,
             ep.name,
             ep.module_name,
-            attr
+            attr,
         )
 
 

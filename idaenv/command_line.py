@@ -74,25 +74,23 @@ def main():
     ap = ArgumentParser()
     sps = ap.add_subparsers()
 
-    sp = sps.add_parser("update",
-                        help="Update installed IDA modules.")
+    sp = sps.add_parser("update", help="Update installed IDA modules.")
     sp.set_defaults(func=cmd_update)
 
-    sp = sps.add_parser("status",
-                        aliases=["list", "ls"],
-                        help="List installed IDA modules.")
+    sp = sps.add_parser(
+        "status", aliases=["list", "ls"], help="List installed IDA modules."
+    )
     sp.set_defaults(func=cmd_status)
 
     sp = sps.add_parser("prefix", help="Print the idaenv install prefix.")
     sp.set_defaults(func=cmd_prefix)
 
-    sp = sps.add_parser("disable",
-                        help="Disable an IDA module.")
+    sp = sps.add_parser("disable", help="Disable an IDA module.")
     sp.add_argument("module_name")
     sp.set_defaults(func=cmd_disable)
 
     opts = ap.parse_args()
-    if 'func' not in opts:
+    if "func" not in opts:
         opts.func = cmd_status
 
     mgr = manager.get_default_manager()

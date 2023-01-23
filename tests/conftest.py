@@ -139,7 +139,6 @@ def distinfo_pkg_with_dot_legacy(on_sys_path, site_dir):
                 [entries]
                 main = mod:main
             """,
-
         },
         "pkg.lot.dist-info": {
             "METADATA": """
@@ -150,7 +149,6 @@ def distinfo_pkg_with_dot_legacy(on_sys_path, site_dir):
                 [entries]
                 main = mod:main
             """,
-
         },
     }
     build_files(files, prefix=site_dir)
@@ -217,7 +215,7 @@ def build_files(file_defs, prefix=pathlib.Path()):
             full_name.mkdir()
             build_files(contents, prefix=full_name)
         else:
-            with full_name.open('w', encoding='utf-8') as f:
+            with full_name.open("w", encoding="utf-8") as f:
                 f.write(dals(contents))
 
 

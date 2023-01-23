@@ -9,6 +9,7 @@ def test_imports():
     # inject pkg_resources for later tests
     if entrypoints.pkg_resources is None:
         import pkg_resources
+
         entrypoints.pkg_resources = pkg_resources
 
 

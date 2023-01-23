@@ -5,7 +5,7 @@ import os
 IDAUSR_DEFAULTS = {
     "darwin": "$HOME/.idapro",
     "linux": "$HOME/.idapro",
-    "win": "%APPDATA%/Hex-Rays/IDA Pro"
+    "win": "%APPDATA%/Hex-Rays/IDA Pro",
 }
 
 
@@ -20,11 +20,11 @@ def get_virtualenv_path():
     Return the absolute path of the current virtualenv.  Return None if not in
     a virtualenv -- or if the apparent virtualenv path is nonsensical.
     """
-    if hasattr(sys, 'real_prefix'):
+    if hasattr(sys, "real_prefix"):
         if sys.real_prefix != sys.prefix:
             return real_path(sys.prefix)
 
-    elif hasattr(sys, 'base_prefix'):
+    elif hasattr(sys, "base_prefix"):
         if sys.base_prefix != sys.prefix:
             return real_path(sys.prefix)
 

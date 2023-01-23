@@ -39,6 +39,7 @@ class PluginManager(object):
     """
     IDAPython plugin manager.
     """
+
     template_map = {
         "plugins": PLUGIN_TEMPLATE,
         "procs": PROC_TEMPLATE,
@@ -83,10 +84,7 @@ class PluginManager(object):
                 return (ep, wrapper_path)
 
     def plan_delete(self, wrappers):
-        return {
-            "create": [],
-            "delete": list(wrappers)
-        }
+        return {"create": [], "delete": list(wrappers)}
 
     def plan_update(self, module_type):
         "Plan actions for synchronization."
@@ -102,22 +100,15 @@ class PluginManager(object):
         wrapper_set = set(ep for ep, _ in wrappers)
 
         # Active modules don't need a change
-        active_modules = [ep for ep in cur_modules
-                          if ep in wrapper_set]
+        active_modules = [ep for ep in cur_modules if ep in wrapper_set]
 
         # Delete wrappers for uninstalled modules
-        to_delete = [(ep, path) for ep, path in wrappers
-                     if ep not in cur_modules]
+        to_delete = [(ep, path) for ep, path in wrappers if ep not in cur_modules]
 
         # Create wrappers for new modules
-        to_create = [ep for ep in cur_modules
-                     if ep not in wrapper_set]
+        to_create = [ep for ep in cur_modules if ep not in wrapper_set]
 
-        return {
-            "active": active_modules,
-            "delete": to_delete,
-            "create": to_create
-        }
+        return {"active": active_modules, "delete": to_delete, "create": to_create}
 
     def execute_update(self, module_type, changes):
         # Delete uninstalled modules
@@ -132,8 +123,9 @@ class PluginManager(object):
         "Create a wrapper file for IDA."
         wrapper = self.template_map[module_type] % ep_info._asdict()
 
-        dst_path = os.path.join(self.wrapper_dir(module_type),
-                                self.wrapper_name(ep_info))
+        dst_path = os.path.join(
+            self.wrapper_dir(module_type), self.wrapper_name(ep_info)
+        )
         print("Writing wrapper to %r..." % dst_path)
         with open(dst_path, "w") as wf:
             wf.write(wrapper)
@@ -171,15 +163,16 @@ class PluginManager(object):
         m = re.search(r"EntryPointInfo(\(.*?\))", content)
         if m:
             ep = ast.literal_eval(m.group(1))
-            if (isinstance(ep, tuple) and
-                    len(ep) == 5 and
-                    all(isinstance(elt, str) for elt in ep)):
+            if (
+                isinstance(ep, tuple)
+                and len(ep) == 5
+                and all(isinstance(elt, str) for elt in ep)
+            ):
                 return entrypoints.EntryPointInfo(*ep)
 
     def wrapper_name(self, ep_info):
         def clean(s):
-            s = re.sub(r"(?<=[a-z])[A-Z]",
-                       lambda m: "_" + m.group(0).lower(), s)
+            s = re.sub(r"(?<=[a-z])[A-Z]", lambda m: "_" + m.group(0).lower(), s)
             s = s.lower()
             s = re.sub(r"[^a-zA-Z0-9_]", "", s)
             s = s.strip("_")
@@ -187,9 +180,7 @@ class PluginManager(object):
 
         dist_part = clean(ep_info.dist[:15])
         name_part = clean(ep_info.name[:15])
-        sha_part = hashlib.sha1(
-            "_".join(ep_info).encode('utf8')
-        ).hexdigest()[:6]
+        sha_part = hashlib.sha1("_".join(ep_info).encode("utf8")).hexdigest()[:6]
         return "%s_%s_%s.py" % (dist_part, name_part, sha_part)
 
 
