@@ -4,3 +4,4 @@
 /build/
 .tox
 .hypothesis
+.pytest_cache
