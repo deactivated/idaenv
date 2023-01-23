@@ -4,10 +4,8 @@ import re
 import ast
 import os
 import hashlib
-import pkg_resources
 
-from collections import namedtuple
-
+from . import entrypoints
 from .utils import get_virtualenv_path, get_default_ida_usr
 
 
@@ -37,9 +35,6 @@ from %(module)s import *
 """
 
 
-EntryPointInfo = namedtuple("EntryPointInfo", "dist group name module attr")
-
-
 class PluginManager(object):
     """
     IDAPython plugin manager.
@@ -58,7 +53,7 @@ class PluginManager(object):
 
         # XXX: Doing this here is a bit of a hack; pkg_resources needs to be
         # re-initialized whenever a module is installed or removed.
-        pkg_resources._initialize_master_working_set()
+        entrypoints.refresh_entrypoint_caches()
 
     def initialize_user_dir(self, user_dir):
         if not user_dir:
@@ -148,15 +143,7 @@ class PluginManager(object):
 
     def find_installed_modules(self, module_type):
         entry_point_group = self.entry_point_name(module_type)
-        cur_modules = set()
-        for ep in pkg_resources.iter_entry_points(entry_point_group):
-            attr = ep.attrs[0] if ep.attrs else ""
-            cur_modules.add(EntryPointInfo(ep.dist.key,
-                                           entry_point_group,
-                                           ep.name,
-                                           ep.module_name,
-                                           attr))
-        return cur_modules
+        return set(entrypoints.iter_entry_point_info(entry_point_group))
 
     def wrapper_dir(self, module_type):
         "Return path to wrappers for a given module type."
@@ -187,7 +174,7 @@ class PluginManager(object):
             if (isinstance(ep, tuple) and
                     len(ep) == 5 and
                     all(isinstance(elt, str) for elt in ep)):
-                return EntryPointInfo(*ep)
+                return entrypoints.EntryPointInfo(*ep)
 
     def wrapper_name(self, ep_info):
         def clean(s):
